@@ -73,19 +73,29 @@ export default function Home() {
   return (
     <main className="flex min-h-dvh w-full items-center justify-center bg-background p-4 text-foreground">
 
-      <div className="max-w-sm flex flex-col items-center gap-6 sm:items-start sm:text-left mr-20">
-        <h1 className="max-w-sm text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-          587 Labs feels like{" "}
+      <div className="max-w-sm flex flex-col items-center gap-6 sm:items-start sm:text-left mr-60">
+
+        <h1 className="max-w-sm text-3xl font-semibold leading-2 tracking-tight text-black dark:text-zinc-50">
+          587 Labs{" "}
+        </h1>
+
+        <h2 className="text-xl leading-6 text-zinc-800 dark:text-zinc-400">feels like{" "}
           <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
             magic
           </code>{" "}
-        </h1>
-        <p className="max-w-md text-medium leading-8 text-zinc-600 dark:text-zinc-400">
-          Start with the chat to learn more or head over to{" "}
-          <a href="https://587labs.com" className="font-medium text-zinc-950 dark:text-zinc-50">
-            documentation.
-          </a>
+        </h2>
+
+        <p className="max-w-md text-sm leading-6 text-zinc-600 dark:text-zinc-600">
+          Start with the chat to learn more{" "}
+          <span className="block">
+            Or head over to{" "}
+            <a href="https://587labs.com/docs" className="font-medium text-zinc-950 dark:text-zinc-50">
+              documentation
+            </a>
+            .
+          </span>
         </p>
+
       </div>
 
       <Card className="h-[35rem] w-[calc(100vw-5rem)] max-w-sm overflow-hidden sm:w-full">
