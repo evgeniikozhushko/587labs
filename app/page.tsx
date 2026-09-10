@@ -1,69 +1,144 @@
-import Image from "next/image";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Bubble, BubbleContent } from "@/components/ui/bubble";
+import {
+  Message,
+  MessageContent,
+  MessageHeader,
+} from "@/components/ui/message";
+import {
+  MessageScroller,
+  MessageScrollerButton,
+  MessageScrollerContent,
+  MessageScrollerItem,
+  MessageScrollerProvider,
+  MessageScrollerViewport,
+} from "@/components/ui/message-scroller";
+
+type ChatMessage = {
+  id: string;
+  role: "user" | "assistant";
+  label: string;
+  text: string;
+};
+
+const messages: ChatMessage[] = [
+  {
+    id: "welcome",
+    role: "assistant",
+    label: "587 Labs",
+    text: "Hi. I can help scope, design, and ship practical AI systems.",
+  },
+  {
+    id: "prompt",
+    role: "user",
+    label: "You",
+    text: "What can we build before the agent is connected?",
+  },
+  {
+    id: "response",
+    role: "assistant",
+    label: "587 Labs",
+    text: "Start with a static transcript that exercises the same scrolling surface the agent will use later.",
+  },
+  {
+    id: "handoff",
+    role: "assistant",
+    label: "587 Labs",
+    text: "When the agent API is ready, this list can be replaced by streamed messages without changing the layout.",
+  },
+  {
+    id: "constraints",
+    role: "user",
+    label: "You",
+    text: "Keep it quiet, fixed, and close to the future chat shape.",
+  },
+  {
+    id: "confirmation",
+    role: "assistant",
+    label: "587 Labs",
+    text: "That works. The shell can stay static while the message rows use role-based alignment and AI-compatible message fields.",
+  },
+];
 
 export default function Home() {
+  const lastMessageId = messages[messages.length - 1]?.id;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
+    <main className="flex min-h-dvh w-full items-center justify-center bg-background p-4 text-foreground">
+
+      <div className="max-w-sm flex flex-col items-center gap-6 sm:items-start sm:text-left mr-20">
+        <h1 className="max-w-sm text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
+          587 Labs feels like{" "}
+          <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
+            magic
+          </code>{" "}
+        </h1>
+        <p className="max-w-md text-medium leading-8 text-zinc-600 dark:text-zinc-400">
+          Start with the chat to learn more or head over to{" "}
+          <a href="https://587labs.com" className="font-medium text-zinc-950 dark:text-zinc-50">
+            documentation.
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        </p>
+      </div>
+
+      <Card className="h-[35rem] w-[calc(100vw-5rem)] max-w-sm overflow-hidden sm:w-full">
+        <CardHeader className="border-b border-border">
+          <CardTitle>587 Labs</CardTitle>
+          <CardDescription>Static chat preview</CardDescription>
+        </CardHeader>
+        <CardContent className="min-h-0 flex-1 overflow-hidden p-0">
+          <MessageScrollerProvider>
+            <MessageScroller>
+              <MessageScrollerViewport>
+                <MessageScrollerContent className="gap-4 p-4">
+                  {messages.map((message) => {
+                    const align = message.role === "user" ? "end" : "start";
+
+                    return (
+                      <MessageScrollerItem
+                        key={message.id}
+                        messageId={message.id}
+                        scrollAnchor={message.id === lastMessageId}
+                      >
+                        <Message align={align}>
+                          <MessageContent>
+                            <MessageHeader
+                              className={align === "end" ? "justify-end" : undefined}
+                            >
+                              {message.label}
+                            </MessageHeader>
+                            <Bubble
+                              align={align}
+                              variant={
+                                message.role === "user" ? "default" : "secondary"
+                              }
+                            >
+                              <BubbleContent>{message.text}</BubbleContent>
+                            </Bubble>
+                          </MessageContent>
+                        </Message>
+                      </MessageScrollerItem>
+                    );
+                  })}
+                </MessageScrollerContent>
+              </MessageScrollerViewport>
+              <MessageScrollerButton />
+            </MessageScroller>
+          </MessageScrollerProvider>
+        </CardContent>
+        <CardFooter className="border-t border-border">
+          <div className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 text-sm text-muted-foreground">
+            Ask 587 Labs...
+          </div>
+        </CardFooter>
+      </Card>
+    </main>
   );
 }
