@@ -1,6 +1,7 @@
 'use client'
 import { useState } from "react";
 import { useRef } from "react";
+import type { ChatHistoryItem } from "@/app/api/chat/chat-utils";
 // import { Ratelimit } from "@upstash/ratelimit";
 
 import {
@@ -33,7 +34,6 @@ type ChatMessage = {
   text: string;
 };
 
-type HistoryItem = { role: "user" | "model"; parts: { text: string }[] };
 type LogEntry = { query: string; response: string };
 
 function getErrorMessage(error: unknown) {
@@ -87,7 +87,7 @@ export default function Home() {
 
   const [input, setInput] = useState("");
   const [log, setLog] = useState<ChatMessage[]>(messages);
-  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [history, setHistory] = useState<ChatHistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
 
   const lastMessageId = log[log.length - 1]?.id;
@@ -259,7 +259,7 @@ export default function Home() {
             type="submit"
             disabled={loading}
           >
-            {/* {loading ? "PROCESSING" : "F5=SEND"} */}
+            {loading ? "Sending..." : "Send"}
           </button>
         </form>
       </CardFooter>

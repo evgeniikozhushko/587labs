@@ -14,7 +14,7 @@ import {
   normalizeHistory,
 } from "./chat-utils";
 
-const CHAT_MODEL = "gemini-2.5-flash";
+const CHAT_MODEL = "gemini-3.6-flash";
 
 let client: GoogleGenAI | null = null;
 
