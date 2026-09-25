@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
-import { SYSTEM_PROMPT } from "./system-prompts";
+import { CONTACT_EMAIL, SYSTEM_PROMPT } from "./system-prompts";
 import {
   checkRateLimits,
   recordAbuseAttempt,
@@ -63,7 +63,7 @@ function rateLimitMessage(tier?: string) {
     case "minute":
       return "You've hit the per-minute limit. Please try again in a minute.";
     case "daily":
-      return "You've hit today's limit. Please try again tomorrow or email support@freakmount.com.";
+      return `You've hit today's limit. Please try again tomorrow or email ${CONTACT_EMAIL}.`;
     default:
       return "You're sending messages too fast. Please try again in a moment.";
   }
@@ -129,8 +129,7 @@ export async function POST(request: NextRequest) {
       if (!abuse.success) {
         return NextResponse.json(
           {
-            error:
-              "Too many policy violations. Access temporarily restricted. Email support@freakmount.com if this is in error.",
+            error: `Too many policy violations. Access temporarily restricted. Email ${CONTACT_EMAIL} if this is in error.`,
           },
           {
             status: 429,
@@ -140,7 +139,7 @@ export async function POST(request: NextRequest) {
       }
 
       const response =
-        "I can only help with Freakmount-related questions. What can I help you with today?";
+        "I can only help with questions about 587 Labs and our services. What are you working on?";
       const updatedHistory = [
         ...history,
         { role: "user", parts: [{ text: message }] },
@@ -157,7 +156,7 @@ export async function POST(request: NextRequest) {
       history,
       config: {
         systemInstruction: SYSTEM_PROMPT,
-        maxOutputTokens: 300,
+        maxOutputTokens: 600,
         temperature: 0.7,
       },
     });

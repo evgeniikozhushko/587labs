@@ -9,13 +9,10 @@ export const MAX_MESSAGE_LENGTH = 2000;
 
 export const JAILBREAK_PATTERNS = [
   /ignore (previous|prior|above|all) instructions?/i,
-  /system prompt/i,
   /you are now/i,
   /pretend (to be|you are)/i,
-  /act as (?!a freakmount)/i,
   /developer mode/i,
   /DAN mode/i,
-  /jailbreak/i,
   /forget (everything|your instructions)/i,
 ];
 

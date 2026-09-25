@@ -33,25 +33,25 @@ function getLimiters(): RateLimiters | null {
         redis,
         limiter: Ratelimit.slidingWindow(5, "10 s"),
         analytics: true,
-        prefix: "freakmount:burst",
+        prefix: "587labs:burst",
       }),
       minute: new Ratelimit({
         redis,
         limiter: Ratelimit.slidingWindow(30, "1 m"),
         analytics: true,
-        prefix: "freakmount:minute",
+        prefix: "587labs:minute",
       }),
       daily: new Ratelimit({
         redis,
         limiter: Ratelimit.slidingWindow(200, "1 d"),
         analytics: true,
-        prefix: "freakmount:daily",
+        prefix: "587labs:daily",
       }),
       abuse: new Ratelimit({
         redis,
         limiter: Ratelimit.slidingWindow(3, "1 h"),
         analytics: true,
-        prefix: "freakmount:abuse",
+        prefix: "587labs:abuse",
       }),
     };
 
