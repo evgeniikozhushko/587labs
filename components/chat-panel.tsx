@@ -1,6 +1,5 @@
 'use client'
-import { useState } from "react";
-import { useRef } from "react";
+import { useEffect, useState } from "react";
 import type { ChatHistoryItem } from "@/app/api/chat/chat-utils";
 // import { Ratelimit } from "@upstash/ratelimit";
 
@@ -34,8 +33,98 @@ type ChatMessage = {
   text: string;
 };
 
-type LogEntry = { query: string; response: string };
+// Defines the storage name and data shape for the chat history
+const CHAT_STORAGE_KEY = "587labs:chat:v1";
 
+// Defines the data structure for the chat history
+type SavedConversation = {
+  version: 1;
+  log: ChatMessage[]; // The chat history
+  history: ChatHistoryItem[]; // The conversation history
+};
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    !Array.isArray(value)
+  );
+}
+
+function isChatMessage(value: unknown): value is ChatMessage {
+  return (
+    isRecord(value) &&
+    typeof value.id === "string" &&
+    typeof value.label === "string" &&
+    typeof value.text === "string" &&
+    (value.role === "user" || value.role === "assistant")
+  );
+}
+
+function isChatHistoryItem(value: unknown): value is ChatHistoryItem {
+  return (
+    isRecord(value) &&
+    (value.role === "user" || value.role === "model") &&
+    Array.isArray(value.parts) &&
+    value.parts.every(
+      (part: unknown) =>
+        isRecord(part) && typeof part.text === "string",
+    )
+  );
+}
+
+function isSavedConversation(
+  value: unknown,
+): value is SavedConversation {
+  return (
+    isRecord(value) &&
+    value.version === 1 &&
+    Array.isArray(value.log) &&
+    value.log.every(isChatMessage) &&
+    Array.isArray(value.history) &&
+    value.history.every(isChatHistoryItem)
+  );
+}
+
+// Helper function to get the saved chat history from localStorage
+function getSavedConversation(): SavedConversation | null {
+  try {
+    const saved = localStorage.getItem(CHAT_STORAGE_KEY);
+
+    if (!saved) return null;
+
+    const parsed: unknown = JSON.parse(saved);
+
+    if (!isSavedConversation(parsed)) return null;
+
+    return parsed;
+  } catch (error) {
+    console.warn("Could not restore the conversation:", error);
+    return null;
+  }
+}
+
+function saveConversation(conversation: SavedConversation): void {
+  try {
+    localStorage.setItem(
+      CHAT_STORAGE_KEY,
+      JSON.stringify(conversation),
+    );
+  } catch (error) {
+    console.warn("Could not save the conversation:", error);
+  }
+}
+
+function clearSavedConversation(): void {
+  try {
+    localStorage.removeItem(CHAT_STORAGE_KEY);
+  } catch (error) {
+    console.warn("Could not clear the saved conversation:", error);
+  }
+}
+
+
+// Helper function to get the error message from an unknown error
 function getErrorMessage(error: unknown) {
   if (error instanceof Error && error.message) {
     return error.message;
@@ -89,20 +178,61 @@ export default function Home() {
   const [log, setLog] = useState<ChatMessage[]>(messages);
   const [history, setHistory] = useState<ChatHistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [restored, setRestored] = useState(false); // Whether the chat history has been restored from localStorage
+
+  // Restore the chat history from localStorage
+  useEffect(() => {
+    const saved = getSavedConversation();
+
+    if (saved) {
+      setLog(saved.log);
+      setHistory(saved.history);
+    }
+
+    setRestored(true);
+  }, []);
+
+  // Save the chat history to localStorage when the chat history changes
+  useEffect(() => {
+    if (!restored || loading) return;
+
+    const isFreshConversation =
+      history.length === 0 &&
+      log.length === 1 &&
+      log[0].id === "welcome";
+
+    if (isFreshConversation) {
+      clearSavedConversation();
+      return;
+    }
+
+    saveConversation({
+      version: 1,
+      log,
+      history,
+    });
+  }, [restored, loading, log, history]);
 
   const lastMessageId = log[log.length - 1]?.id;
 
-  const idCounter = useRef(0);
-
+  // Helper function to generate a unique ID for each message
   function nextId() {
-    idCounter.current += 1;
-    return `msg-${idCounter.current}`;
+    return crypto.randomUUID();
+  }
+
+  // Start a new conversation
+  function startNewConversation() {
+    if (!restored || loading) return;
+
+    setInput("");
+    setLog(messages);
+    setHistory([]);
   }
 
   // SUBMIT //
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!restored || loading || !input.trim()) return;
 
     const query = input;
     setInput("");
@@ -192,6 +322,15 @@ export default function Home() {
       <CardHeader className="border-b border-border">
         <CardTitle>587 Labs</CardTitle>
         <CardDescription>Static chat preview</CardDescription>
+
+        <button
+          type="button"
+          onClick={startNewConversation}
+          disabled={!restored || loading}
+          className="justify-self-start text-sm underline underline-offset-4 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          New conversation
+        </button>
       </CardHeader>
       <CardContent className="min-h-0 flex-1 overflow-hidden p-0">
         <MessageScrollerProvider>
@@ -253,11 +392,11 @@ export default function Home() {
             placeholder="Ask 587 Labs..."
             autoComplete="off"
             spellCheck={false}
-            disabled={loading}
+            disabled={!restored || loading}
           />
           <button
             type="submit"
-            disabled={loading}
+            disabled={!restored || loading}
           >
             {loading ? "Sending..." : "Send"}
           </button>
