@@ -6,11 +6,12 @@ import type { ChatHistoryItem } from "@/app/api/chat/chat-utils";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Bubble, BubbleContent } from "@/components/ui/bubble";
 import {
   Message,
@@ -321,16 +322,17 @@ export default function Home() {
     <Card className="h-[min(70dvh,35rem)] min-h-[28rem] w-full max-w-lg overflow-hidden lg:h-[35rem]">
       <CardHeader className="border-b border-border">
         <CardTitle>587 Labs</CardTitle>
-        <CardDescription>Static chat preview</CardDescription>
 
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="sm"
           onClick={startNewConversation}
           disabled={!restored || loading}
-          className="justify-self-start text-sm underline underline-offset-4 disabled:cursor-not-allowed disabled:opacity-50"
+          className="self-start"
         >
           New conversation
-        </button>
+        </Button>
       </CardHeader>
       <CardContent className="min-h-0 flex-1 overflow-hidden p-0">
         <MessageScrollerProvider>
@@ -377,16 +379,14 @@ export default function Home() {
         </MessageScrollerProvider>
       </CardContent>
       <CardFooter className="border-t border-border">
-        {/* <div className="flex h-10 w-full items-center rounded-md border border-input bg-background px-3 text-sm text-muted-foreground">
-          Ask 587 Labs...
-        </div> */}
-
         <form
           onSubmit={handleSubmit}
-        // style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}
+          className="flex w-full items-center gap-2"
         >
-          <input
+          <Input
             type="text"
+            aria-label="Message to 587 Labs"
+            className="min-w-0 flex-1"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask 587 Labs..."
@@ -394,12 +394,12 @@ export default function Home() {
             spellCheck={false}
             disabled={!restored || loading}
           />
-          <button
+          <Button
             type="submit"
             disabled={!restored || loading}
           >
             {loading ? "Sending..." : "Send"}
-          </button>
+          </Button>
         </form>
       </CardFooter>
     </Card>
