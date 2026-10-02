@@ -13,6 +13,7 @@ import {
   MAX_MESSAGE_LENGTH,
   normalizeHistory,
 } from "./chat-utils";
+import { isConfidentlyOffTopic, OFF_TOPIC_RESPONSE } from "./topic-check";
 
 const CHAT_MODEL = "gemini-3.6-flash";
 
@@ -151,12 +152,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (await isConfidentlyOffTopic(message, history)) {
+      const updatedHistory = [
+        ...history,
+        { role: "user", parts: [{ text: message }] },
+        { role: "model", parts: [{ text: OFF_TOPIC_RESPONSE }] },
+      ];
+      return NextResponse.json(
+        { response: OFF_TOPIC_RESPONSE, history: updatedHistory },
+        { headers: successHeaders(rateLimit) },
+      );
+    }
+
     const chat = getClient().chats.create({
       model: CHAT_MODEL,
       history,
       config: {
         systemInstruction: SYSTEM_PROMPT,
-        maxOutputTokens: 600,
+        maxOutputTokens: 1200,
         temperature: 0.7,
       },
     });
