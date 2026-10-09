@@ -9,6 +9,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,6 +27,7 @@ import {
   MessageScrollerProvider,
   MessageScrollerViewport,
 } from "@/components/ui/message-scroller";
+import Image from "next/image";
 
 type ChatMessage = {
   id: string;
@@ -321,18 +323,23 @@ export default function Home() {
 
     <Card className="h-[min(70dvh,35rem)] min-h-[28rem] w-full max-w-lg overflow-hidden lg:h-[35rem]">
       <CardHeader className="border-b border-border">
-        <CardTitle>587 Labs</CardTitle>
-
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={startNewConversation}
-          disabled={!restored || loading}
-          className="self-start"
-        >
-          New conversation
-        </Button>
+        <div className="flex w-full items-center justify-between">
+          {/* <CardTitle>587 Labs</CardTitle> */}
+          <CardTitle>
+            <Image src="/587labs_black_sanscircle.png" alt="587 Labs" width={80} height={32} />
+          </CardTitle>
+          {/* <CardDescription>Static chat preview</CardDescription> */}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={startNewConversation}
+            disabled={!restored || loading}
+            className="self-end"
+          >
+            New chat
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="min-h-0 flex-1 overflow-hidden p-0">
         <MessageScrollerProvider>
