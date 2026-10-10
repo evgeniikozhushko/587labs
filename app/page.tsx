@@ -4,8 +4,9 @@ export default function Home() {
   // const lastMessageId = messages[messages.length - 1]?.id;
 
   return (
-    <main className="flex min-h-dvh w-full justify-center overflow-x-hidden bg-background px-4 py-8 text-foreground sm:px-6 lg:items-center lg:py-12">
-      <div className="flex w-full max-w-4xl flex-col items-start gap-8s lg:flex-row lg:items-center lg:justify-between lg:gap-16">
+    <main className="flex min-h-dvh w-full justify-center items-center overflow-x-hidden bg-background px-4 py-8 text-foreground sm:px-6 lg:items-center lg:py-12">
+      <div className="flex w-full max-w-4xl flex-col items-center
+ gap-8s lg:flex-row lg:items-center lg:justify-between lg:gap-16">
         <section className="flex w-full max-w-sm flex-col items-start gap-0 text-left lg:shrink-0">
           <h1 className="max-w-sm text-3xl font-semibold leading-tight tracking-tight text-black dark:text-zinc-50">
             587 Labs{" "}
@@ -18,7 +19,7 @@ export default function Home() {
             </code>{" "}
           </h2>
 
-          <p className="mt-10 max-w-md text-sm leading-6 text-zinc-600 dark:text-zinc-600">
+          <p className="mt-6 mb-8 max-w-md lg:mb-0 text-sm leading-6 text-zinc-600 dark:text-zinc-600">
             Start with the chat to learn more.{" "}
             <span className="block">
               Or head over to{" "}
@@ -32,7 +33,7 @@ export default function Home() {
             </span>
           </p>
         </section>
-        <ChatPanel /> 
+        <ChatPanel />
       </div>
     </main>
   );

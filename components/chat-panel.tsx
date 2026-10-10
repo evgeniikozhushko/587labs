@@ -326,7 +326,10 @@ export default function Home() {
         <div className="flex w-full items-center justify-between">
           {/* <CardTitle>587 Labs</CardTitle> */}
           <CardTitle>
-            <Image src="/587labs_black_sanscircle.png" alt="587 Labs" width={80} height={32} />
+            {/* <Image src="/587labs_black_sanscircle.png" alt="587 Labs" width={80} height={32} /> */}
+            <h1 className="max-w-sm text-md font-semibold leading-tight tracking-tight text-black dark:text-zinc-50">
+              587{" "}
+            </h1>
           </CardTitle>
           {/* <CardDescription>Static chat preview</CardDescription> */}
           <Button
