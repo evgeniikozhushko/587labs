@@ -21,7 +21,7 @@ export default function Home() {
 
           <p className="mt-6 mb-8 max-w-md lg:mb-0 text-sm leading-6 text-zinc-600 dark:text-zinc-600">
             Start with the chat to learn more.{" "}
-            <span className="block">
+            {/* <span className="block">
               Or head over to{" "}
               <a
                 href="https://587labs.com/docs"
@@ -30,7 +30,7 @@ export default function Home() {
                 documentation
               </a>
               .
-            </span>
+            </span> */}
           </p>
         </section>
         <ChatPanel />
