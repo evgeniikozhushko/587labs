@@ -1,5 +1,5 @@
-// import { Ratelimit } from "@upstash/ratelimit";
-// import { Redis } from "@upstash/redis";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 
 const FAIL_OPEN_MESSAGE = "[RATE-LIMIT] Redis unavailable, failing open";
 

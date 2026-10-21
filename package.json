@@ -13,6 +13,8 @@
     "@google/genai": "^2.24.0",
     "@phosphor-icons/react": "^2.1.10",
     "@shadcn/react": "^0.3.1",
+    "@upstash/ratelimit": "^2.2.0",
+    "@upstash/redis": "^1.39.0",
     "ai": "^7.0.114",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.2.6",
